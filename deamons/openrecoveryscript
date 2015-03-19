@@ -1,0 +1,3 @@
+install /sdcard/supersu.zip
+wipe cache
+wipe dalvik

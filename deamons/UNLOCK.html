@@ -1,0 +1,481 @@
+
+
+
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+<style id="antiClickjack">body{display:none !important;}</style>
+
+<script type="text/javascript">
+   if (self === top) {
+       var antiClickjack = document.getElementById("antiClickjack");
+       antiClickjack.parentNode.removeChild(antiClickjack);
+   } else {
+       top.location = self.location;
+   }
+</script>
+
+	<title>
+
+	HTCdev - Unlock Bootloader
+
+		</title>
+
+	<meta charset="UTF-8">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	
+
+
+<link rel="stylesheet" href="/assets/css/global/reset.css">
+<link rel="stylesheet" href="/assets/css/global/htc.gui.css">
+<link rel="stylesheet" href="/assets/css/htc.developer.style.css">
+<link rel="stylesheet" href="/assets/css/htc.developer.gbc.style.css">
+<link rel="stylesheet" href="/assets/css/htc.developer.gui-en.css">
+<link rel="stylesheet" href="/assets/js/fancybox/jquery.fancybox-1.3.4.css">
+<!--[if IE 7]> <link rel="stylesheet" type="text/css" href="/assets/css/global/ie7.css" /> <![endif]-->
+<!--[if IE 8]> <link rel="stylesheet" type="text/css" href="/assets/css/global/ie8.css" /> <![endif]--> 
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/htc.global.js"></script>
+<script type="text/javascript" src="/assets/js/plugins/jquery.fi.ui.button.js"></script>
+<script type="text/javascript" src="/assets/js/plugins/jquery.fi.checkbox.js"></script>
+<script type="text/javascript" src="/assets/js/plugins/jquery.fi.paginate-dropdown.js"></script>
+<script type="text/javascript" src="/assets/js/plugins/jquery.fi.validate.js"></script>
+<script type="text/javascript" src="/assets/js/plugins/jquery.fi.placeholder.js"></script>
+<script type="text/javascript" src="/assets/js/plugins/jquery.cycle.lite.mod.js"></script>
+<script type="text/javascript" src="/assets/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.form.js"></script>
+
+<script type="text/javascript">
+
+/**
+ * HTC Developer Center
+ * 
+ * 
+ * @author Andreas Zecher (Fantasy Interactive)
+ * @version 0.1
+ * 
+ * @uses js/jquery-1.5.js
+ * @uses js/plugins/jquery.fi.ui.button.js
+ * @uses js/plugins/jquery.fi.checkbox.js
+ * @uses js/plugins/jquery.cycle.lite.js
+ * 
+ * @method
+ * init()
+ * - Initializes the component 
+ * 
+ */
+
+
+$(function() {
+  
+    // Style checkboxes  
+
+    $('input[type="checkbox"]:not(.nostyle)').checkbox();
+    
+    // Style buttons
+    
+    $('#user_login').button({
+        buttonClass: "green-button-small"
+    });
+    
+    $('.large_form input[type="submit"]').button({
+        buttonClass: "green-button-big"
+    });
+    
+    $('#bootloader_accept_terms_submit').button({
+        buttonClass: "green-button"
+    });
+	
+    // Handle default values and focus state for input fields and textareas
+
+	$('.large_form input, #feedback_form textarea, #bootloader_form textarea, .small_form input, #nav form input, .compact_form input' ).placeholder();
+
+      $('#registration_form').validate(); 
+$('#legal-terms').validate();
+   
+/*    // Show success popup in large forms
+        
+    $('#feedback_form, #login_form, #user_tool_bar, #bootloader_form, #bootloader_accept_terms').validate(  );    
+	
+	$('.trigger-modal').live('click', function(e) {
+		e.preventDefault();
+		$(this).modal();
+	});
+	
+    $('#feedback_form, #registration_form, #bootloader_form').submit( function(e) {
+      e.preventDefault();
+      $('#feedback_form, #registration_form').confirmationPopup();            
+    });
+*/
+              
+// Handle thumbnail navigation in homepage marquee
+    $('#homepage_marquee_nav li').click(function(e) {
+      e.preventDefault();
+ if(!$(this).hasClass('active')) {
+      $('.homepage_marquee').fadeOut(200);
+     var classname = $(this).attr('class');
+     $('.homepage_marquee.' + classname).delay(200).fadeIn(200); 
+     $(this).siblings().removeClass('active');    
+     $(this).addClass('active');
+}
+    });   
+
+ 
+    // Handle cycling of events panel
+    
+    $('.events').cycle({ 
+        fx:    'fade', 
+        timeout: 6000,
+        speed:  900,
+        sync:   0,
+        pause:  0
+     });
+    
+     // Style country select dropdown in user registration form
+
+     $('#registration_country').paginateDropDown();
+
+     $('#registration_email').bind('change', function(e) {
+       var disposable_email_error_div = $('#disposable-email-error');
+       var email_field = $('#registration_email');
+       var current_email_value = $.trim(email_field.val());
+       if(current_email_value) {
+         $.ajax({
+           url: '/_register_email_check.php',
+           type: 'POST',
+           data: 'email=' + current_email_value,
+           dataType: 'json',
+           success: function(data, statusCode, xhr) {
+             if(data.success) {
+               email_field.addClass('valid');
+               email_field.removeClass('invalid');
+               disposable_email_error_div.text('');
+             } else {
+               email_field.addClass('invalid');
+               email_field.removeClass('valid');
+               disposable_email_error_div.text('Sorry, email addresses from that domain are not allowed.');
+             }
+           },
+           error: function() {
+             disposable_email_error_div.text('An error occured. Please try again.');
+           }
+         });
+       }
+     });
+});
+
+</script>
+
+<script type="text/javascript">
+ 
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-8738086-4']);
+  _gaq.push(['_setDomainName', 'none']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+ 
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+ 
+</script>
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function() {
+		$("a#continue-window").fancybox(
+			{
+			'width'		: 350,
+			'height'	: 475,
+			'padding'	: 0,
+			'type'		:'iframe',
+			'scrolling'	:'yes'
+			}
+		);
+	});
+
+
+		$(document).ready(function() {
+   	 	$("#supported-devices").ajaxForm({
+        		success: function(responseText){
+            			$.fancybox({
+                		'content' 	: responseText,
+				'width'		: 350,
+				'height'	: 475,
+				'padding'	: 0,
+				'type'		: 'inline',
+				'onClosed'	: function(){ /* Reset variable when closing*/
+             window.location.reload();
+         }
+            			});
+				$('#supported-devices')[0].reset();
+				
+        		}
+    		}); 
+	});
+
+	
+
+	jQuery(document).ready(function() {
+		$("a#login-window").fancybox(
+			{'width'	: 400,
+			'height'	: 525,
+			'padding'	: 0,
+			'scrolling'	:'no',
+			'type'		:'iframe'
+			}
+		);
+	});
+
+
+
+</script>
+
+<script type="text/javascript">
+
+jQuery(document).ready(function($){
+
+	jQuery(document).ready(function() {
+		jQuery('table.supported').hide();
+		jQuery('a.linky').click(function() {
+			jQuery('table.supported').toggle();
+			jQuery('a.linky').toggleClass('open');
+		return false;
+		});
+	});
+});
+
+</script>
+
+<script type="text/javascript" src="/assets/js/si.files.js"></script>
+
+</head>
+
+<body class="en
+
+
+bootloader
+
+
+">
+
+  <div id="container">
+    <div id="nav">
+      <h1><a href="/"><span>HTCdev</span></a></h1>
+      <ul>
+        <li><a href="/devcenter" id="nav_dev_center"><span>Developer Center</span></a></li>
+        <li><a href="/resources" id="nav_quick_start"><span>Resources</span></a></li>
+      </ul>
+      <form id="user_tool_bar" method="post" action="https://www.htcdev.com/"  >
+<div class='hiddenFields'>
+<input type="hidden" name="XID" value="d818ba14ed4150f6a6740eae3d5b66037ea4913a" />
+<input type="hidden" name="ACT" value="9" />
+<input type="hidden" name="RET" value="/bootloader" />
+<input type="hidden" name="site_id" value="1" />
+</div>
+
+
+       <a href="/register/" id="user_register" name="user_register">Register</a>
+	<input type="text" id="user_email" name="username" placeholder="Username" ><input type="password" id="user_password" name="password" placeholder="Password" class="login-password">
+	<input type="submit" id="user_login" value="Login">
+      </form>
+    </div>
+
+    <div id="main">
+
+      <div id="content_header">
+        <h2>Unlock Bootloader</h2>
+        <h3>Unlock the possibilities with total customization</h3>
+      </div>
+
+      <div id="content_divider"></div>      
+      <div id="content_container">
+
+        <div id="side_navigation_container">
+          <div id="side_navigation_border_top"></div>
+            <div id="side_navigation">
+
+              <h2><a href="/bootloader">Unlock Bootloader</a></h2>
+              <ul>
+
+                <li><a href="/bootloader/faq">Frequently Asked Questions</a></li>
+
+
+                <li><a href="/bootloader/preview_unlock_process">Preview Unlock Process</a></li>
+
+
+                <li><a href="/bootloader/about_unlock_process">About Unlock and S-ON</a></li>
+
+
+                <li><a href="/bootloader/rom_flashing_guide">ROM Flashing Guide</a></li>
+
+
+
+                <li><a href="/bootloader/building_kernels">Building Kernels</a></li>
+
+              </ul>
+
+
+            </div>
+          <div id="side_navigation_border_bottom"></div>
+        </div>
+
+        <div id="content_article">
+          
+
+
+          <h2>Unlocking Your Bootloader</h2>
+          
+          <img src="/managed-assets/images/boot-image-bootloader.png" style="margin-left: -35px; padding-top: 5px; padding-right: 10px; float: left;">
+
+			<p>HTC is committed to listening to users and delivering customer satisfaction. We have heard your voice and starting now, we will allow our bootloader to be unlocked for 2011 models going forward. <!-- We plan on releasing the updates that will allow you to unlock your bootloader in the coming months, --> Please keep an eye on this website for more details on which devices will be adding this feature. We are extremely pleased to see the energy and enthusiasm from our fans and loyal customers, and we are excited to see what you are capable of. HTC eagerly anticipates your innovations.</p>
+
+			<p><strong><em>It is our responsibility to caution you that not all claims resulting or caused by or from the unlocking of the bootloader may be covered under warranty.</em></strong> Please note that unlocking your bootloader does not mean that you will be able to unlock the SIM lock.  Unlocking your SIM lock is at the discretion of your operator/carrier and is not part of the bootloader unlocking scope.</p>
+
+			<p>Our devices have been designed with our hardware and software specifications in mind and unlocking the bootloader will change the software and may cause unexpected side effects. It is impossible for HTC to ensure the proper functioning of your device after this.  In the worst case scenario, it is possible that your device may be physically damaged due to overheating or the behavior of your device might be altered including, but not limited to, hearing aid compatibility (HAC) and specific absorption rate (SAR) values.</p>
+
+			<p>Some content on your device may also be invalidated and cannot be accessed any more because of invalid DRM security keys. This includes content that you may have purchased through a 3rd party vendor and through HTC. Furthermore, although you will still be able to receive updates to your device via FOTA (“firmware over the air”), we do not guarantee that updating your device via FOTA will not render your device unusable. Please understand that you will not be able to return your device to the original state and going forward your device may not be held covered under the warranty for all claims resulting from the unlocking of the bootloader. HTC bears no responsibility if your device is no longer usable afterwards.</p>
+			
+<p>HTC is committed to assisting customers in unlocking bootloaders for HTC devices. However, due to some of our carrier customers concerns, certain models with specific restrictions may not be able to be unlocked. Please refer to our list of supported devices to see if your device is eligible for unlocking the bootloader.</p>
+
+<p><strong><em>We strongly suggest that you do not unlock the bootloader unless you are confident that you understand the risks involved.</em></strong> This is a technical procedure and the side effects could possibly necessitate repairs to your device not covered under warranty. If you are still interested in unlocking the bootloader, and you understand the consequences both to your device and to your warranty, then you may refer to the following pages where we have provided the unlocking instructions.</p>
+
+
+
+        </div>
+        
+        <div id="content_right_sidebar">
+          <div id="side_terms">
+
+
+
+            <h2>Supported Devices</h2>
+
+<h3>Select “All other supported models” if you cannot find your phone in this list.  Devices launched after 9/2011 will be shipped with the unlock capability.  Please check back often for updates on the unlock status of additional devices.</h3>
+
+
+
+<form action="/process/continue" method="POST" id="supported-devices" name="devices">
+
+
+
+
+
+
+
+
+		      				<div class="devices-error form-error"></div>
+	<select id="supported-devices-menu" class="validate" tabindex="1" name="device_select" data-validation-type="NotEmpty" data-validation-error-message="Please select your device." data-validation-error-message-context="#supported-devices" data-validation-error-message-element=".devices-error">
+		<option value="non">------- Select Your Device -------</option>
+
+		<option value="supported-amaze-4g-mobilicity">Amaze 4G</option>
+		<option value="supported-amaze-4g-t-mobile">Amaze 4G (T-Mobile)</option>
+		<option value="older-droid-eris">Droid Eris *</option>
+		<option value="supported-droid-incredible-2">Droid Incredible 2 (Verizon)</option>
+		<option value="supported-evo-3d-emea">EVO 3D (EMEA)</option>
+		<option value="supported-evo-3d-rogers">EVO 3D (Rogers)</option>
+		<option value="older-evo-3d-sprint">EVO 3D (Sprint) *</option>
+		<option value="supported-evo-4g-korea-telecom">EVO 4G+ (Korea Telecom)</option>
+		<option value="supported-evo-design-sprint">EVO Design (Sprint)</option>
+		<option value="supported-evo-view-4g-sprint">EVO View 4G (Sprint)</option>
+		<option value="older-htc-a315c">HTC A315c *</option>
+		<option value="older-htc-a6390">HTC A6390 *</option>
+		<option value="older-htc-aria">HTC Aria *</option>
+		<option value="older-htc-chacha">HTC ChaCha *</option>
+		<option value="older-htc-desire">HTC Desire *</option>
+		<option value="older-htc-desire-hd">HTC Desire HD *</option>
+		<option value="older-htc-desire-z-a7272">HTC Desire Z A7272 *</option>
+		<option value="older-htc-dream">HTC Dream *</option>
+		<option value="older-htc-droid-incredible">HTC Droid Incredible *</option>
+		<option value="supported-flyer-wwe">HTC Flyer</option>
+		<option value="older-htc-hero">HTC Hero *</option>
+		<option value="supported-htc-jetstream">HTC Jetstream (AT&amp;T)</option>
+		<option value="older-htc-legend">HTC Legend *</option>
+		<option value="older-htc-magic">HTC Magic *</option>
+		<option value="older-htc-merge">HTC Merge *</option>
+		<option value="supported-htc-one">HTC One</option>
+		<option value="supported-htc-one-m8">HTC One (M8)</option>
+		<option value="supported-htc-one-max">HTC One max</option>
+		<option value="supported-htc-one-mini">HTC One mini</option>
+		<option value="supported-htc-rezound">HTC Rezound (Verizon)</option>
+		<option value="supported-htc-rhyme">HTC Rhyme (Verizon)</option>
+		<option value="older-htc-salsa">HTC Salsa *</option>
+		<option value="older-htc-tattoo">HTC Tattoo *</option>
+		<option value="supported-htc-thunderbolt">HTC Thunderbolt (Verizon)</option>
+		<option value="older-htc-tianxi-a9188">HTC Tianxi A9188 *</option>
+		<option value="supported-htc-vivid">HTC Vivid (AT&amp;T)</option>
+		<option value="older-htc-wildfire1">HTC Wildfire *</option>
+		<option value="older-htc-wildfire-a3360">HTC Wildfire A3360 *</option>
+		<option value="older-htc-wildfire-a3380">HTC Wildfire A3380 *</option>
+		<option value="older-htc-wildfire-s">HTC Wildfire S *</option>
+		<option value="supported-incredible-s-wwe">Incredible S</option>
+		<option value="older-mytouch-3g-slide">myTouch 3G Slide *</option>
+		<option value="older-mytouch-4g">myTouch 4G *</option>
+		<option value="supported-mytouch-4g-slide-t-mobile-us">myTouch 4G Slide (T-Mobile US)</option>
+		<option value="supported-s710d-china-telecom">S710d (China Telecom)</option>
+		<option value="supported-sensation-eu">Sensation</option>
+		<option value="supported-sensation-4g-t-mobile-us">Sensation 4G (T-Mobile US)</option>
+		<option value="older-t-mobile-g2">T-Mobile G2 *</option>
+		<option value="supported-all-other">All Other Supported Models</option>
+
+	</select>
+
+
+            <a id="login-window" href="https://www.htcdev.com/process/login-form" class="green-button"><span>Begin Unlock Bootloader</span></a>
+
+</form>
+
+
+<p class="asterik"><span style="color: red;">*</span> Indicates HBOOT update required.</p>
+
+<h3 class="warning">HTC is committed to assisting customers in unlocking bootloaders for HTC devices. However, certain models may not be unlockable due to operator restrictions.  We continue to work with our partners on this, check back often for ongoing updates about unlockable devices.</h3>
+
+
+
+          </div>
+        </div> 
+      </div>
+
+
+    	<div class="clear"></div>
+    </div>
+  </div>
+
+  <div id="footer_container">
+    <div id="footer">
+    	<a href="http://www.htc.com/" id="footer_logo" style="background: none"><img src="/assets/img/htc-logo-footer.svg" style="width:67px; height:37px"/></a>
+	    <div class="left">
+		    Copyright &copy; 2015 HTC Corporation. All rights reserved.
+		    <ul>
+		      <li><a href="/terms">Terms of Use</a></li>
+		      <li><a href="/privacy_policy">Privacy Policy</a></li>
+		      <li><a href="/about">About HTCdev</a></li>
+		      <li><a href="/resources/affiliates">HTCdev Affiliates</a></li>
+		    </ul>
+	    </div>
+    	<div class="right" id="footer_twitter">
+	      <a href="http://www.twitter.com/htcdev">Follow Us</a>
+	</div>  
+	<div class="right" id="footer_feedback">
+      		<a href="/contact">Comments</a> - Tell HTCdev what YOU want.
+    	</div>       
+    	<div class="clear"></div>
+     </div>
+   </div>
+
+<script type="text/javascript" language="javascript">
+// <![CDATA[
+
+SI.Files.stylizeAll();
+
+// ]]>
+</script>
+
+
+</body>
+</html>
